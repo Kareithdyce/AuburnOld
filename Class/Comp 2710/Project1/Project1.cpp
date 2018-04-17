@@ -1,3 +1,13 @@
+/**
+ * Student ID: 903700162
+ * File Name : Project1.exe
+ * Ran using PuTTY
+ * kzdd0030@tux062:~/Desktop/Project1$ vim Project1.cpp
+ * wrote code
+ * kzdd0030@tux062:~/Desktop/Project1$ g++ -o Project1 Project1.cpp
+ * kzdd0030@tux062:~/Desktop/Project1$ ./Project1
+ */
+
 #include <limits>
 #include <iostream>
 #include <string>
@@ -15,12 +25,13 @@ const static int NUM_SPACES = 20;
  */ 
 void openScores(ifstream &read) {
     ofstream write;
-    read.open("highscores.txt");
+    string file = "highscores.txt";
+    read.open((char*)file.c_str());
     if(read.fail()){
         read.close();
-        write.open("highscores.txt");
+        write.open((char*)file.c_str());
         write.close();
-        read.open("highscores.txt");
+        read.open((char*)file.c_str());
     }
 }
 
@@ -96,8 +107,8 @@ class player{
 
 
     /**
-     * Changes the intellegence stat.
-     * Intput: Desired change for the intellegnce stat.
+     * Changes the Intelligence stat.
+     * Intput: Desired change for the Intelligence stat.
      */ 
     void changeIntell(int change){
         intell += change;
@@ -116,6 +127,13 @@ class player{
             time = 0;
         }
     }
+    /**
+     * Changes the time stat.
+     * Intput: Desired the time stat.
+     */ 
+    void setTime(int change){
+        time = change;
+        }
 
     /**
      * Changes the money stat.
@@ -144,15 +162,16 @@ struct score {
 };
 
 class scores {
+     const static int MAX_SCORES = 11;
+    score scoreL[MAX_SCORES];
+    int counter;
+    public:
     ifstream reader;
     ofstream writer;
-    const static int MAX_SCORES = 11;
-    int counter = 0;
-    score scoreL[MAX_SCORES];
-    public:
+   
     scores(score s){
         scoreL[0] = s;
-        counter++;
+        counter = 1;
         readScore();
         sortScores();
         editScores();
@@ -193,7 +212,8 @@ class scores {
      * Modifies the scores text file;
      */ 
     void editScores(){
-        writer.open("highscores.txt");
+        string file = "highscores.txt";
+        writer.open((char*)file.c_str());
         for(int i = 0; i < counter; i++){
             writer<<scoreL[i].name<<" "<<scoreL[i].point<<endl;
         }
@@ -218,7 +238,8 @@ class hallway {
      */ 
     void setUp(){
         ifstream reader;
-        reader.open("puzzles.txt");
+        string file = "puzzles.txt";
+        reader.open((char*)file.c_str());
         for(int i = 0; i < NUM_SPACES; i++){
             puzzle *fact = new puzzle;
             count++;
@@ -293,36 +314,36 @@ class events {
         switch(p->stat){
             case 'I':
                 if(mod > 0){
-                    message += "You feel smarter! Intellegence has raised by " + to_string(p->change)
-                    + " points!";
+                    message += "You feel smarter! Intelligence has raised by ";
+                    message += p->change + " points!";
                 }
                 else{
-                    message += "You feel knowledge slipping away from you! Intellegence has dropped by " + to_string(abs(mod * p->change))
-                        + " points!";
+                    message += "You feel knowledge slipping away from you! Intelligence has dropped by ";
+                    message += abs(mod * p->change) + " points!";
                 }
                 pL.changeIntell(mod*p->change);
             break;
             case 'T': 
                 if(mod > 0){
                     modT = 1;
-                    message += "You see everything moving strangly as if moving in reverse! You now have" + to_string(p->change)
-                    + " more hours!";
+                    message += "You see everything moving strangly as if moving in reverse! You now have ";
+                    message += p->change + " more hours!";
                 }
                 else{
-                    message += "You see everything moving much faster around you! You now have" + to_string(p->change)
-                    + " less hours!";
+                    message += "You see everything moving much faster around you! You now have " +(p->change);
+                    message += " less hours!";
                 }
                 pL.changeTime(modT*p->change);
                 modT = -1;
             break;
             case 'M':
                 if(mod > 0){
-                    message += "You feel your pockets getting heavier! Your money has raised by $" + to_string(p->change)
-                    + ".00!";
+                    message += "You feel your pockets getting heavier! Your money has raised by $" + (p->change);
+                    message += ".00!";
                 }
                 else{
-                    message += "You feel your pockets getting lighter! Your money has dropped by $" + to_string(abs(mod * p->change))
-                    + ".00!";
+                    message += "You feel your pockets getting lighter! Your money has dropped by $" + abs(mod * p->change);
+                    message += ".00!";
                 }
                 pL.changeMoney(mod*p->change);
             break;
@@ -350,12 +371,12 @@ class events {
         else if(chance >= 60){
             cout<<"You get a message saying that your dissertation is now due in "<<deltaT<< " hours."<<endl;;
             cout<<"You immediately get to work as time flies by and you finish it in just the nick of time"<<endl;
-            cout<<"However the strain of rushing has left you burnt out which causes your intellegence to drop "<<deltaS<<" points!"<<endl;
+            cout<<"However the strain of rushing has left you burnt out which causes your Intelligence to drop "<<deltaS<<" points!"<<endl;
             pL.changeIntell(NEG*deltaS);
             pL.changeTime(NEG*deltaT);  
         }
         else if(chance >= 50){
-            cout<<"You run into another graduate student  also braving the hallway and talk for"<<deltaT<< " hours."<<endl;;
+            cout<<"You run into another graduate student  also braving the hallway and talk for "<<deltaT<< " hours."<<endl;;
             cout<<"After the talk you feel much refreshed and confident that you can beat the hallway."<<endl;
             cout<<"Your confidence raises "<<joke<<" points! However as you are about charge ahead to beat the hallway you hear a scream."<<endl;
             cout<<"You turn around and your newly found friend is gone without a trace... Your confidence falls "<<joke *3<<" points!"<<endl;
@@ -366,15 +387,15 @@ class events {
             cout<<"Suddenly a professor holding important looking documents runs right into you!"<<endl;
             cout<<"As the papers fly into the air you catch a glimse of same topic that you are currently working with."<<endl;
             cout<<"After you help the professor pick the papers you strike up a convseration for "<<deltaT<<" hours."<<endl;
-            cout<<"You learn quite a bit from him and increase you intellegence by "<<deltaS<<" points!"<<endl;
+            cout<<"You learn quite a bit from him and increase you Intelligence by "<<deltaS<<" points!"<<endl;
             pL.changeTime(NEG*deltaT);  
             pL.changeIntell(deltaS);
         }
         else if(chance >= 25){
             cout<<"Suddenly a stack of over 300 tests appears in front of you almost making you trip."<<endl;
-            cout<<"Suprised you see your mentor looking upset telling you to have it done in "<<deltaT<<" hours"<<endl;
-            cout<<"It takes a trendous effort but you manage to finish just in the nick of time."<<endl;
-            cout<<"You turn in the stack and recieve $"<<deltaS<<".00 and then prepare yourself to continue the hallway."<<endl;
+            cout<<"Surprised you see your mentor looking upset telling you to have it done in "<<deltaT<<" hours"<<endl;
+            cout<<"It takes a tremendous effort but you manage to finish just in the nick of time."<<endl;
+            cout<<"You turn in the stack and receive $"<<deltaS<<".00 and then prepare yourself to continue the hallway."<<endl;
             pL.changeTime(NEG*deltaT);  
             pL.changeMoney(deltaS);
         }
@@ -387,12 +408,13 @@ class events {
 
 class game{
     public:
-    int dist = 0;
+    int dist;
     hallway h;
     player p1;
     game(){}
     game(player pIn){
         p1 = pIn;
+        dist = 0;
         p1.riddle = h.head;
     }
 
@@ -401,7 +423,7 @@ class game{
      */ 
     void gameOver(){
         if(p1.getIntelligence() == 0){
-            cout<<"\nYour intellegence has dropped to zero! Sadly you also forgot how to breathe!"<<endl;
+            cout<<"\nYour intelligence has dropped to zero! Sadly you also forgot how to breathe!"<<endl;
         }
         else if(p1.getMoney() == 0){
             cout<<"\nYour money is all gone! You manage to slowly escape the hallway but injured, weak, and hungry."<<endl;
@@ -459,7 +481,7 @@ class game{
             validInt(choice);
             switch(choice){
                 case 1:
-                    cout<<"\nYou take a deep breath and step into the dark unkown..."<<endl;
+                    cout<<"\nYou take a deep breath and step into the dark unknown..."<<endl;
                     p1.riddle = p1.riddle -> next;
                     dist++;
                     e = events();
@@ -471,7 +493,7 @@ class game{
                     cout<<"Your intellect has increased by "<<deltaS<<", but you lost "<<deltaT;
                     cout<<" hours.\n"<<endl;
                     deltaT *= -1;
-                    p1.changeMoney(deltaS);
+                    p1.changeIntell(deltaS);
                     p1.changeTime(deltaT);
                     break;
                 case 3:
@@ -486,7 +508,7 @@ class game{
                     p1.showStats();
                     break;
                 case 5:
-                    p1.changeTime(-100);
+                    p1.setTime(-100);
                     break;
                 default:
                     cout<<"\tError invalid input. Try again."<<endl;
@@ -561,7 +583,7 @@ int main(){
     srand(time(0));
     string temp;
     cout<<"What is your name? ";
-    cin>>temp;
+    getline(cin,temp);
     player p = player(temp);
     cout<<"==========================================================="<<endl;
     cout<<"|\t\tWelcome, "<<p.name<<"!\t\t\t  |"<<endl;
@@ -575,7 +597,6 @@ int main(){
         s.point = scoreT;
         scores total = scores(s);
     }
-    cin>>temp;
     return 0;
 }
 
