@@ -7,7 +7,6 @@
  * kzdd0030@tux062:~/Desktop/Project2$ g++ -o Project2 Project2.cpp
  * kzdd0030@tux062:~/Desktop/Project2$ ./Project2
  */
-
 #include <limits>
 #include <iostream>
 #include <unordered_map>
@@ -816,6 +815,12 @@ void setup(unordered_map<string, Staff> &map){
         writer<<"A"<<endl;
         writer.close();
         reader.open((char*)file.c_str());
+        cout<<"Initializing system. Please wait"<<endl;
+        for(int i = 0; i < 10; i++){
+            cout<<"."<<endl;
+        }
+        cout<<"System setup."<<endl;
+        press_any_key();
     }
     while(reader>>name){
         Staff s = Staff();
@@ -884,6 +889,7 @@ void login(unordered_map<string, Staff> &map){
 }
 
 int main(){
+    
     unordered_map<string, Staff> staffMap; 
     string file = "staff-info.txt";
     int choice = 0;

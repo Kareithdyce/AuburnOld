@@ -1,6 +1,3 @@
-user1
-1212
-S
 admin
 0000
 A
